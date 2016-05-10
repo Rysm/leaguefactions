@@ -1,0 +1,78 @@
+ag<html>
+
+<title>Faction League</title>
+
+
+<?php
+
+header("access-control-allow-origin: *");
+
+?>
+
+<style>
+    #bg{
+        background-size:cover
+    }
+</style>
+
+<!-- javascript scripts -->
+<script src="https://cdn.firebase.com/js/client/2.4.2/firebase.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="js/data.js"></script>
+
+<!-- Document Input -->
+<input id="userName" />
+<input type="submit" onclick="summonerLookUp();" />
+<br/><font color="white"> Summoner ID: <span id="sID"></span></font>
+
+<!-- background image credit to Riot Games-->
+<body id = "bg" background = "http://na.leagueoflegends.com/sites/default/files/upload/environmentart-sru-04_1920.jpg">
+
+<!-- Script for graph-->
+<canvas id="factionChart" width="400" height="400"></canvas>
+<script src="js/chart.js"></script>
+
+<script>
+    var totals = getMasteryPt(sID);
+    var ctx = document.getElementById("factionChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["Demacia vs Noxus"],
+            datasets: [{
+                label: 'Demacia',
+                data: [totals[0]],
+                backgroundColor: 'rgba(107, 173, 255, 0.5)'
+            },
+            {
+                label: 'Noxus',
+                data: [totals[1]],
+                backgroundColor: 'rgba(235, 49, 52, 0.5)'
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    });
+
+
+    //update the chart content
+    function updateChart(){
+      myChart.data.datasets[0].data[0] = totals[0];
+      myChart.data.datasets[1].data[0] = totals[1];
+      myChart.update();
+    }
+
+    setInterval(updateChart, 3000);
+
+</script>
+
+</body>
+
+</html>
